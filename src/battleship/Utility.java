@@ -12,7 +12,7 @@ import java.util.Scanner;
 //contains utility methods for BattleshipGame
 public class Utility {
 
-    //instance variable
+    //creates scanner
     static Scanner scan = new Scanner(System.in);
 
 

@@ -6,12 +6,12 @@ package battleship;
  * Class: CSCI 1933-12
  */
 
-//begins the game
+//contains main method to begin the game
 public class StartGame {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) { //main method to run program
 
-        BattleshipGame game = new BattleshipGame();
+        BattleshipGame game = new BattleshipGame(); //creates BattleshipGame object
 
         game.startGame(); //runs game
     }

@@ -1,5 +1,7 @@
 package battleship;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 /**
  * Created by Mike Plucker
  * Date: 2/17/2016
@@ -27,17 +29,21 @@ public class BattleshipGame {
             turnNum = 1;
             hitCount = 0;
             penalty = 0;
+            String yesOrNo = ""; //local variable
 
             setupBoard(); //initial setup of game board
 
             placeShipsAndMines(); //place ships and mines on game board
 
+            //gives user information on how to play game
             System.out.printf("\nThere are %d ship(s) and %d mine(s) on the board", shipNum, mineNum);
+            System.out.println("\nYou have Unlimited turns, but the goal is to sink the ship(s) in as few moves as possible.");
+            System.out.println("You are Penalized turns for hitting mines and guessing the same coordinates multiple times.");
             System.out.println("\nTry to Hit the ship(s) by guessing a coordinate (row col)");
             System.out.println("The upper left coordinates are (0,0).");
             System.out.println("Enter moves between (0,0) and (" + (board.getRow() - 1) + "," + (board.getColumn() - 1) + ").\n");
 
-            if(mode == 0 || mode == 1){ //if in normal or verbose mode, display game board at start
+            if(mode == 0 || mode == 1){ //if in normal or verbose mode, displays appropriate game board at start
                 board.displayGameBoard(board.getBoard()); //displays board without all symbols (no ship or mine locations)
             }
 
@@ -45,7 +51,7 @@ public class BattleshipGame {
 
                 //if in test mode, display board every turn
                 if(mode == 2){
-                    board.displayAllBoard(board.getBoard()); //displays all symbols (ship and mine locations)
+                    board.displayTestBoard(board.getBoard()); //displays all symbols (ship and mine locations)
                 }
 
                 System.out.println("\nTurn #  " + turnNum); //print which turn user is on
@@ -59,9 +65,24 @@ public class BattleshipGame {
             System.out.println("It took you " + (turnNum - 1) + " turns to win.");
             System.out.println("You were penalized " + penalty + " times.");
 
-            board.displayAllBoard(board.getBoard()); //displays final board (all symbols)
+            board.displayTestBoard(board.getBoard()); //displays final board (all symbols)
+
 
             System.out.print("\nDo you want to play again? (y/n) "); //see if user wants to play again
+            /*yesOrNo = Utility.getStringInput(); //gets user input using getStringInput method in Utility class and auto-converts it to lowercase
+
+            while(yesOrNo != "y"){ //validates that user enters y or n
+                System.out.print("\nError: Please enter either y or n");
+                System.out.print("\nDo you want to play again? (y/n) "); //see if user wants to play again
+                yesOrNo = Utility.getStringInput(); //gets user input using getStringInput method in Utility class and auto-converts it to lowercase
+            }
+
+            if(yesOrNo == "y"){
+                playAgain = true;
+            }
+            else
+                playAgain = false;*/
+
             playAgain = (Utility.getStringInput().charAt(0) == 'y'); //restart game if y, quit if n
 
             System.out.println(); //spacer
@@ -74,13 +95,13 @@ public class BattleshipGame {
     public void setupBoard(){
 
         System.out.println("The Game board can be between (3 X 3) and (10 X 10).");
-        System.out.print("What size do you want the game board to be? (row col) ");
+        System.out.print("What size do you want the game board to be? (row col) "); //prompt user to select game board size
 
         board = new BattleshipBoard(Utility.getIntInput(3, 10), Utility.getIntInput(3, 10)); //validates input then creates game board with given dimensions
 
         board.initBoard(board.getBoard()); //sets board to initial symbols
 
-        System.out.println("\nWhat mode do you want to play in? ");
+        System.out.println("\nWhat mode do you want to play in? "); //prompt user to select game mode
         System.out.print("Normal (0), Verbose (1) or Test (2)? ");
         mode = Utility.getIntInput(0, 2);
     } //end method
@@ -126,11 +147,11 @@ public class BattleshipGame {
 
         while(!add){ //loops until a ship is added
 
-            //picks random (x,y) coordinate
-            int x = Utility.randomInt(0, board.getBoard().length - 1);
-            int y = Utility.randomInt(0, board.getBoard()[0].length - 1);
+            //picks random (x,y) coordinate using randomInt(int min, int max) method in Utility class
+            int x = Utility.randomInt(0, board.getBoard().length - 1); //gets random number between 0 and size of game board
+            int y = Utility.randomInt(0, board.getBoard()[0].length - 1); //^^
 
-            boolean horizontal = (Utility.randomInt(0, 1)) == 1; //decides if ship is horizontal or vertical
+            boolean horizontal = (Utility.randomInt(0, 1)) == 1; //decides if ship is horizontal or vertical by randomly picking 0 or 1
 
             if(horizontal){ //adds horizontal ship
                 boolean willFit = true;
@@ -191,9 +212,9 @@ public class BattleshipGame {
 
         while(!add){ //loops until a mine is added
 
-            //picks random (x,y) coordinate
-            int x = Utility.randomInt(0, board.getBoard().length - 1);
-            int y = Utility.randomInt(0, board.getBoard()[0].length - 1);
+            //picks random (x,y) coordinate using randomInt(int min, int max) method in Utility class
+            int x = Utility.randomInt(0, board.getBoard().length - 1); //gets random number between 0 and size of game board
+            int y = Utility.randomInt(0, board.getBoard()[0].length - 1); //^^
 
             boolean willFit = true;
 
@@ -278,7 +299,7 @@ public class BattleshipGame {
         int rowMax = board.getBoard().length - 1;
         int colMax = board.getBoard()[0].length - 1;
 
-        System.out.println("Guess = (" + x + "," + y + ")");
+        System.out.println("You Guessed = (" + x + "," + y + ")");
 
         System.out.println("RowMax = " + rowMax);
         System.out.println("ColMax = " + colMax);

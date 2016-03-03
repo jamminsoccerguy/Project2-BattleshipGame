@@ -35,7 +35,7 @@ public class BattleshipBoard {
         this.ROW = row;
         this.COLUMN = column;
 
-        BOARD = new int [getRow()][getColumn()]; //creates game board with given dimensions
+        BOARD = new int [getRow()][getColumn()]; //creates game board with user given dimensions
     }
 
 
@@ -53,7 +53,7 @@ public class BattleshipBoard {
     }
 
 
-    //initializes board to starting symbol (~)
+    //initializes board to starting empty symbol (~)
     public void initBoard(int [][] board){
 
         //iterates over all elements of 2D array
@@ -65,7 +65,7 @@ public class BattleshipBoard {
     } //end method
 
 
-    //displays Verbose game board
+    //displays normal or verbose game board
     public void displayGameBoard(int [][] board){
 
         System.out.println(); //spacer
@@ -103,7 +103,7 @@ public class BattleshipBoard {
 
 
     //displays test game board
-    public void displayAllBoard(int [][] board){
+    public void displayTestBoard(int [][] board){
 
         System.out.println(); //spacer
 
@@ -131,7 +131,7 @@ public class BattleshipBoard {
                         System.out.print("\t" + "m"); //mine symbol
                         break;
                     case HIT:
-                        System.out.print("\t" + "X"); //hit symbol
+                        System.out.print("\t" + "X"); //hit ship symbol
                         break;
                     case MISS:
                         System.out.print("\t" + "*"); //miss symbol
