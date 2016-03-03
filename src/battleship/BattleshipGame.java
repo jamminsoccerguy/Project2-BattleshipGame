@@ -13,13 +13,18 @@ public class BattleshipGame {
     BattleshipBoard board;
 
     //instance variables
-    private int turnNum, hitCount, penalty, totalHits, shipNum = 0, mineNum = 0, mode;
+    private int turnNum, hitCount, penalty, totalHits, shipNum = 0, mineNum = 0, mode, currentScore;
     private final int SHIPLENGTH = 3; //all ships have length of 3
     private boolean playAgain = true;
+    private int bestScore = 1000; //initial bestScore
+
+
 
 
     //starts game
     public void startGame(){
+
+        Utility.write(bestScore); //write bestScore to data file for first time
 
         System.out.println("Welcome to Battleship!\n");
 
@@ -39,6 +44,7 @@ public class BattleshipGame {
             System.out.printf("\nThere are %d ship(s) and %d mine(s) on the board", shipNum, mineNum);
             System.out.println("\nYou have Unlimited turns, but the goal is to sink the ship(s) in as few moves as possible.");
             System.out.println("You are Penalized turns for hitting mines and guessing the same coordinates multiple times.");
+            System.out.println("The current Best Score: " + bestScore);
             System.out.println("\nTry to Hit the ship(s) by guessing a coordinate (row col)");
             System.out.println("The upper left coordinates are (0,0).");
             System.out.println("Enter moves between (0,0) and (" + (board.getRow() - 1) + "," + (board.getColumn() - 1) + ").\n");
@@ -64,6 +70,17 @@ public class BattleshipGame {
             System.out.println("\nYou win! You sunk all of the ships!");
             System.out.println("It took you " + (turnNum - 1) + " turns to win.");
             System.out.println("You were penalized " + penalty + " times.");
+
+            currentScore = turnNum - 1; //calculate currentScore
+            System.out.println("Your Score is: " + currentScore);
+
+            bestScore = Utility.read(); //read bestScore from data file
+
+            if(currentScore < bestScore){ //if user beat the high score (lower is better!)
+                bestScore = currentScore; //replace bestScore with the lower currentScore
+                System.out.println("You beat the Best Score! ");
+                Utility.write(bestScore); //write bestScore to data file
+            }
 
             board.displayTestBoard(board.getBoard()); //displays final board (all symbols)
 
