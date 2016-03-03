@@ -174,7 +174,20 @@ public class BattleshipGame {
                 //ship will fit!
                 for(int i = 0; i < SHIPLENGTH; i++){ //iterates over ship length (3)
                     board.getBoard()[x][y + i] = 1; //places ship horizontally starting at "y" and going to the right
+
+                    //call methods to add close and veryClose miss symbols
+                    addVeryCloseMiss(x + 1, y + i);
+                    addVeryCloseMiss(x - 1, y + i);
+                    addCloseMiss(x + 2, y + i);
+                    addCloseMiss(x - 2, y + i);
                 }
+
+                //call methods to add close and veryClose miss symbols
+                addVeryCloseMiss(x, y - 1);
+                addVeryCloseMiss(x, y + 3);
+                addCloseMiss(x, y - 2);
+                addCloseMiss(x, y + 4);
+
                 add = true; //leave loop
             }//end horizontal if
             else{ //adds vertical ship
@@ -197,7 +210,20 @@ public class BattleshipGame {
                 //ship will fit!
                 for(int i = 0; i < SHIPLENGTH; i++){ //iterates over ship length (3)
                     board.getBoard()[x + i][y] = 1; //places ship vertically starting at "x" and going down
+
+                    //call methods to add close and veryClose miss symbols
+                    addVeryCloseMiss(x + i, y + 1);
+                    addVeryCloseMiss(x + i, y - 1);
+                    addCloseMiss(x + i, y + 2);
+                    addCloseMiss(x + i, y - 2);
                 }
+
+                //call methods to add close and veryClose miss symbols
+                addVeryCloseMiss(x - 1, y);
+                addVeryCloseMiss(x + 3, y);
+                addCloseMiss(x - 2, y);
+                addCloseMiss(x + 4, y);
+
                 add = true; //leave loop
             } //end else
         } //end added loop
@@ -232,6 +258,36 @@ public class BattleshipGame {
             add = true; //leave loop
         } //end added loop
     } //end method
+
+
+    //adds veryCloseMiss symbols around ships
+    public void addVeryCloseMiss(int x, int y){
+
+        //local variables
+        int rowMax = board.getBoard().length - 1;
+        int colMax = board.getBoard()[0].length - 1;
+
+        if(x <= rowMax && y <= colMax && x >= 0 && y >= 0){ //check that this coordinate is in bounds
+            if(board.getBoard()[x][y] != 1 && board.getBoard()[x][y] != 2){ //check if there is a ship or mine at this coordinate
+                board.getBoard()[x][y] = 6; //places very close symbol
+            }
+        }
+    }
+
+
+    //adds closeMiss symbols around ships
+    public void addCloseMiss(int x, int y){
+
+        //local variables
+        int rowMax = board.getBoard().length - 1;
+        int colMax = board.getBoard()[0].length - 1;
+
+        if(x <= rowMax && y <= colMax && x >= 0 && y >= 0){ //check that this coordinate is in bounds
+            if(board.getBoard()[x][y] != 1 && board.getBoard()[x][y] != 2 && board.getBoard()[x][y] != 6){ //check if there is a ship or mine at this coordinate and won't overwrite a veryClose symbol!
+                board.getBoard()[x][y] = 8; //places close symbol
+            }
+        }
+    }
 
 
     //compares user's guess to game board and determines results of turn
@@ -286,39 +342,30 @@ public class BattleshipGame {
                 System.out.println("\nUh oh! You've already guessed that spot! It's still a mine! (2 turn penalty)");
                 System.out.println("Your score is: " + (turnNum - 1));
                 break;
+            case 6: //guess was a miss, but very close
+                turnNum++; //increment turn counter
+                System.out.println("\nYou missed! But it was Very Close!");
+                System.out.println("Your score is: " + (turnNum - 1));
+                board.getBoard()[row][column] = 7; //converts element in array to veryCloseAgain symbol
+                break;
+            case 7: //already guessed this very close spot
+                turnNum += 2; //increment turn counter (1 turn penalty for guessing same spot more than once)
+                penalty++;
+                System.out.println("\nUh oh! You've already guessed that spot! It's still Very Close! (1 turn penalty)");
+                System.out.println("Your score is: " + (turnNum - 1));
+                break;
+            case 8: //guess was a miss, but close
+                turnNum++; //increment turn counter
+                System.out.println("\nYou missed! But it was Close!");
+                System.out.println("Your score is: " + (turnNum - 1));
+                board.getBoard()[row][column] = 9; //converts element in array to closeAgain symbol
+                break;
+            case 9: //already guessed this close spot
+                turnNum += 2; //increment turn counter (1 turn penalty for guessing same spot more than once)
+                penalty++;
+                System.out.println("\nUh oh! You've already guessed that spot! It's still Close! (1 turn penalty)");
+                System.out.println("Your score is: " + (turnNum - 1));
+                break;
         }//end switch
-        hint(row, column); //tell player if their guess is close to a ship location
-    } //end method
-
-
-    //tells player if their guess is close to a ship location
-    public void hint(int row, int column){
-
-        //local variables
-        int x = row, y = column;
-        int rowMax = board.getBoard().length - 1;
-        int colMax = board.getBoard()[0].length - 1;
-
-        System.out.println("You Guessed = (" + x + "," + y + ")");
-
-        System.out.println("RowMax = " + rowMax);
-        System.out.println("ColMax = " + colMax);
-
-        System.out.println(board.getBoard()[x][y]);
-
-
-        if(board.getBoard()[x][y] != 3){ //if the guessed coordinate is not a ship
-
-            if(x+1 <= rowMax && x-1 >= 0){
-                if((board.getBoard()[x+1][y] == 1) || (board.getBoard()[x-1][y] == 1)){
-                    System.out.println("A miss, but very close!");
-                }
-            }
-            if(y+1 <= colMax && y-1 >= 0){
-                if((board.getBoard()[x][y+1] == 1 || board.getBoard()[x][y-1] == 1)){
-                    System.out.println("A miss, but very close!");
-                }
-            }
-        }
     } //end method
 }//end class

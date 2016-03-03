@@ -18,6 +18,10 @@ public class BattleshipBoard {
     private final int HIT = 3;
     private final int MISS = 4;
     private final int HITMINE = 5;
+    private final int VERYCLOSE = 6;
+    private final int VERYCLOSEAGAIN = 7;
+    private final int CLOSE = 8;
+    private final int CLOSEAGAIN = 9;
 
 
     //default constructor will set to minimum board size (3 x 3)
@@ -138,6 +142,18 @@ public class BattleshipBoard {
                         break;
                     case HITMINE:
                         System.out.print("\t" + "M"); //mine that's been hit symbol
+                        break;
+                    case VERYCLOSE:
+                        System.out.print("\t" + "v"); //veryClose symbol
+                        break;
+                    case VERYCLOSEAGAIN:
+                        System.out.print("\t" + "V"); //veryCloseAgain symbol
+                        break;
+                    case CLOSE:
+                        System.out.print("\t" + "c"); //close symbol
+                        break;
+                    case CLOSEAGAIN:
+                        System.out.print("\t" + "C"); //closeAgain symbol
                         break;
                 } //end switch
             } //end column loop
